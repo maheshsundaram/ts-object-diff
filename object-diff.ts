@@ -5,7 +5,7 @@ type Primitive = string | number | null | boolean | undefined;
 
 const isPrimitive = (value: unknown): value is Primitive =>
   ["String", "Number", "Null", "Boolean", "Undefined"].includes(
-    StringType(value),
+    StringType(value)
   );
 
 type ArrayLike = (Primitive | ObjectLike | ArrayLike)[];
@@ -23,7 +23,7 @@ const isObjectLike = (value: unknown): value is ObjectLike =>
 /*
  * Return true if a and b are different arrays.
  */
-const compareArrays = (a: ArrayLike, b: ArrayLike): boolean => {
+export const compareArrays = (a: ArrayLike, b: ArrayLike): boolean => {
   if (a.length !== b.length) {
     return true;
   }
@@ -45,7 +45,11 @@ const compareArrays = (a: ArrayLike, b: ArrayLike): boolean => {
     }
 
     if (isArrayLike(aValue) && isArrayLike(bValue)) {
-      return compareArrays(aValue, bValue);
+      const _diff = compareArrays(aValue, bValue);
+      if (_diff) {
+        diff = true;
+        break;
+      }
     }
 
     if (isObjectLike(aValue) && isObjectLike(bValue)) {
@@ -63,10 +67,7 @@ const compareArrays = (a: ArrayLike, b: ArrayLike): boolean => {
 /*
  * Return what has changed in right from left.
  */
-export const difference = (
-  left: ObjectLike,
-  right: ObjectLike,
-): ObjectLike => {
+export const difference = (left: ObjectLike, right: ObjectLike): ObjectLike => {
   const result = Object.keys(right).reduce((memo, key) => {
     const leftVal = left[key];
     const rightVal = right[key];

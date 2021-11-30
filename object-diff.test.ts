@@ -1,8 +1,8 @@
 import { assertEquals } from "https://deno.land/std@0.115.1/testing/asserts.ts";
-import { difference } from "./object-diff.ts";
+import { difference, compareArrays } from "./object-diff.ts";
 
 Deno.test({
-  name: "diff 1",
+  name: "difference 1",
   fn() {
     const left = {
       x: 100,
@@ -27,7 +27,7 @@ Deno.test({
 });
 
 Deno.test({
-  name: "diff 2",
+  name: "difference 2",
   fn() {
     const left = {
       x: 100,
@@ -50,7 +50,7 @@ Deno.test({
 });
 
 Deno.test({
-  name: "diff 3",
+  name: "difference 3",
   fn() {
     const left = {
       x: 100,
@@ -73,7 +73,7 @@ Deno.test({
 });
 
 Deno.test({
-  name: "diff 4",
+  name: "difference 4",
   fn() {
     const left = {
       x: 100,
@@ -103,11 +103,14 @@ Deno.test({
 });
 
 Deno.test({
-  name: "diff 5",
+  name: "difference 5",
   fn() {
     const left = {
       x: 100,
-      y: [[1, 2], [3, 4]],
+      y: [
+        [1, 2],
+        [3, 4],
+      ],
     };
 
     const right = {
@@ -126,7 +129,7 @@ Deno.test({
 });
 
 Deno.test({
-  name: "diff 6",
+  name: "difference 6",
   fn() {
     const left = {
       x: 100,
@@ -149,7 +152,7 @@ Deno.test({
 });
 
 Deno.test({
-  name: "diff 7",
+  name: "difference 7",
   fn() {
     const left = {};
 
@@ -164,7 +167,7 @@ Deno.test({
 });
 
 Deno.test({
-  name: "diff 8",
+  name: "difference 8",
   fn() {
     const left = { a: 100 };
 
@@ -179,7 +182,7 @@ Deno.test({
 });
 
 Deno.test({
-  name: "diff 9",
+  name: "difference 9",
   fn() {
     const left = { a: undefined };
 
@@ -194,7 +197,7 @@ Deno.test({
 });
 
 Deno.test({
-  name: "diff 10",
+  name: "difference 10",
   fn() {
     const left = { a: 100 };
 
@@ -205,5 +208,47 @@ Deno.test({
     const result = difference(left, right);
 
     assertEquals(result, expected);
+  },
+});
+
+Deno.test({
+  name: "compareArrays 1",
+  fn() {
+    const a = [
+      [1, 2],
+      [3, 4],
+    ];
+    const b = [
+      [1, 2],
+      [8, 9],
+    ];
+    assertEquals(compareArrays(a, b), true);
+  },
+});
+
+Deno.test({
+  name: "compareArrays 2",
+  fn() {
+    const a: string[] = [];
+    const b: string[] = [];
+    assertEquals(compareArrays(a, b), false);
+  },
+});
+
+Deno.test({
+  name: "compareArrays 2",
+  fn() {
+    const a = [1, 2];
+    const b = [1, 2, 3, 4];
+    assertEquals(compareArrays(a, b), true);
+  },
+});
+
+Deno.test({
+  name: "compareArrays 2",
+  fn() {
+    const a = [1, 2, 3, 4];
+    const b = [1, 2];
+    assertEquals(compareArrays(a, b), true);
   },
 });
